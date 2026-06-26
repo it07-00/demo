@@ -8,6 +8,7 @@ use App\Enums\RoleEnum;
 use App\Livewire\Operations\CrmIndex;
 use App\Livewire\Operations\ProjectCrud;
 use App\Models\OperationCrmCustomer;
+use App\Models\OperationProject;
 use App\Models\User;
 use App\Services\OperationDataService;
 use Database\Seeders\PermissionSeeder;
@@ -166,5 +167,90 @@ final class OperationsModuleTest extends TestCase
         $this->assertSame('hop-dong.pdf', $docs[0]['name']);
         $this->assertSame('Hợp đồng', $docs[0]['type']);
         Storage::disk('public')->assertExists($docs[0]['path']);
+    }
+
+    public function test_director_can_create_update_and_delete_project(): void
+    {
+        $this->seed();
+
+        $director = User::query()->where('username', 'giamdoc')->firstOrFail();
+
+        Livewire::actingAs($director)
+            ->test(ProjectCrud::class)
+            ->call('openCreate')
+            ->set('formCode', 'DA-TST')
+            ->set('formName', 'Dự án kiểm thử')
+            ->set('formCustomer', 'Khách hàng kiểm thử')
+            ->set('formCustomerType', 'Thông thường')
+            ->set('formBranch', 'Bắc Ninh')
+            ->set('formProduct', 'Cung ứng LĐ thời vụ')
+            ->set('formMethod', 'Cộng tác viên')
+            ->set('formPolicy', 'Lương cứng + tăng ca')
+            ->set('formUnitPrice', 35)
+            ->set('formRecruitStatus', 'Đang tuyển')
+            ->set('formManagerName', 'Đàm Ngọc Anh')
+            ->set('formStatus', 'Đang vận hành')
+            ->set('formDemand', 100)
+            ->set('formActual', 72)
+            ->set('formProgress', 8)
+            ->set('formContractStart', '2026-06-01')
+            ->set('formContractEnd', '2026-12-31')
+            ->set('formTeam', ['Hoàng Tuấn Bảo'])
+            ->call('save')
+            ->assertHasNoErrors();
+
+        $project = OperationProject::query()->where('code', 'DA-TST')->firstOrFail();
+
+        $this->assertSame(28, (int) $project->shortage);
+        $this->assertSame(['Hoàng Tuấn Bảo'], $project->team);
+
+        Livewire::actingAs($director)
+            ->test(ProjectCrud::class)
+            ->call('openEdit', $project->id)
+            ->set('formActual', 91)
+            ->set('formProgress', 12)
+            ->call('save')
+            ->assertHasNoErrors();
+
+        $project->refresh();
+
+        $this->assertSame(91, (int) $project->actual);
+        $this->assertSame(9, (int) $project->shortage);
+        $this->assertSame(12, (int) $project->progress);
+
+        Livewire::actingAs($director)
+            ->test(ProjectCrud::class)
+            ->call('delete', $project->id)
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseMissing('operation_projects', [
+            'id' => $project->id,
+        ]);
+    }
+
+    public function test_project_view_permission_does_not_allow_project_mutation(): void
+    {
+        $this->seed();
+
+        $viewer = User::factory()->create([
+            'username' => 'project-viewer',
+        ]);
+        $viewer->givePermissionTo('dashboard.view', 'project.view');
+        $project = OperationProject::query()->firstOrFail();
+
+        Livewire::actingAs($viewer)
+            ->test(ProjectCrud::class)
+            ->call('openCreate')
+            ->assertForbidden();
+
+        Livewire::actingAs($viewer)
+            ->test(ProjectCrud::class)
+            ->call('openEdit', $project->id)
+            ->assertForbidden();
+
+        Livewire::actingAs($viewer)
+            ->test(ProjectCrud::class)
+            ->call('delete', $project->id)
+            ->assertForbidden();
     }
 }

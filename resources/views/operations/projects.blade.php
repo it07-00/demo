@@ -22,7 +22,7 @@
             </nav>
         </div>
         <div class="d-flex flex-wrap gap-2">
-            @can('project.view')
+            @can('project.create')
                 <button type="button" class="btn btn-success" wire:click="$dispatchTo('operations.project-crud', 'project:open-create')">
                     <i class="fi fi-rr-plus me-1"></i> Tạo dự án
                 </button>
@@ -169,12 +169,16 @@
                                 <td class="text-center">
                                     @if (isset($project['db_id']))
                                         <div class="d-flex gap-1 justify-content-center">
-                                            <button type="button" class="btn btn-sm btn-outline-primary py-0 px-1" wire:click="$dispatchTo('operations.project-crud', 'project:open-edit', { id: {{ (int) $project['db_id'] }} })" title="Sửa">
-                                                <i class="fi fi-rr-pencil" style="font-size: 11px;"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-outline-danger py-0 px-1" wire:confirm="Xóa dự án {{ $project['code'] }}?" wire:click="$dispatchTo('operations.project-crud', 'project:delete', { id: {{ (int) $project['db_id'] }} })" title="Xóa">
-                                                <i class="fi fi-rr-trash" style="font-size: 11px;"></i>
-                                            </button>
+                                            @can('project.update')
+                                                <button type="button" class="btn btn-sm btn-outline-primary py-0 px-1" wire:click="$dispatchTo('operations.project-crud', 'project:open-edit', { id: {{ (int) $project['db_id'] }} })" title="Sửa">
+                                                    <i class="fi fi-rr-pencil" style="font-size: 11px;"></i>
+                                                </button>
+                                            @endcan
+                                            @can('project.delete')
+                                                <button type="button" class="btn btn-sm btn-outline-danger py-0 px-1" wire:confirm="Xóa dự án {{ $project['code'] }}?" wire:click="$dispatchTo('operations.project-crud', 'project:delete', { id: {{ (int) $project['db_id'] }} })" title="Xóa">
+                                                    <i class="fi fi-rr-trash" style="font-size: 11px;"></i>
+                                                </button>
+                                            @endcan
                                         </div>
                                     @endif
                                 </td>
@@ -246,14 +250,18 @@
                             <button class="btn btn-light btn-sm w-100 mt-3" type="button" data-bs-toggle="collapse" data-bs-target="#project-{{ $project['id'] }}">
                                 <i class="fi fi-rr-eye me-1"></i> Chi tiết dự án
                             </button>
-                            @if (isset($project['db_id']))
+                            @if (isset($project['db_id']) && (auth()->user()?->can('project.update') || auth()->user()?->can('project.delete')))
                                 <div class="d-flex gap-1 mt-2">
-                                    <button type="button" class="btn btn-outline-primary btn-sm flex-grow-1" wire:click="$dispatchTo('operations.project-crud', 'project:open-edit', { id: {{ (int) $project['db_id'] }} })">
-                                        <i class="fi fi-rr-pencil me-1"></i> Sửa
-                                    </button>
-                                    <button type="button" class="btn btn-outline-danger btn-sm" wire:confirm="Xóa dự án {{ $project['code'] }}?" wire:click="$dispatchTo('operations.project-crud', 'project:delete', { id: {{ (int) $project['db_id'] }} })">
-                                        <i class="fi fi-rr-trash"></i>
-                                    </button>
+                                    @can('project.update')
+                                        <button type="button" class="btn btn-outline-primary btn-sm flex-grow-1" wire:click="$dispatchTo('operations.project-crud', 'project:open-edit', { id: {{ (int) $project['db_id'] }} })">
+                                            <i class="fi fi-rr-pencil me-1"></i> Sửa
+                                        </button>
+                                    @endcan
+                                    @can('project.delete')
+                                        <button type="button" class="btn btn-outline-danger btn-sm" wire:confirm="Xóa dự án {{ $project['code'] }}?" wire:click="$dispatchTo('operations.project-crud', 'project:delete', { id: {{ (int) $project['db_id'] }} })">
+                                            <i class="fi fi-rr-trash"></i>
+                                        </button>
+                                    @endcan
                                 </div>
                             @endif
                         </div>

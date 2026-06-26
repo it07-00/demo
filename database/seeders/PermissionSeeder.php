@@ -49,6 +49,9 @@ final class PermissionSeeder extends Seeder
         $directorPermissions = [
             PermissionEnum::DashboardView->value,
             PermissionEnum::ProjectView->value,
+            PermissionEnum::ProjectCreate->value,
+            PermissionEnum::ProjectUpdate->value,
+            PermissionEnum::ProjectDelete->value,
             PermissionEnum::StaffView->value,
             PermissionEnum::AnalyticsView->value,
             PermissionEnum::CrmView->value,

@@ -8,7 +8,8 @@ use App\Enums\PermissionEnum;
 use App\Models\OperationProject;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -70,12 +71,13 @@ final class ProjectCrud extends Component
 
     protected function rules(): array
     {
-        $codeRule = $this->editingId > 0
-            ? 'required|string|max:20|unique:operation_projects,code,'.$this->editingId
-            : 'required|string|max:20|unique:operation_projects,code';
-
         return [
-            'formCode' => [$codeRule],
+            'formCode' => [
+                'required',
+                'string',
+                'max:20',
+                Rule::unique('operation_projects', 'code')->ignore($this->editingId ?: null),
+            ],
             'formName' => ['required', 'string', 'max:255'],
             'formCustomer' => ['required', 'string', 'max:255'],
             'formCustomerType' => ['required', 'in:Trọng điểm,Thông thường'],
@@ -108,9 +110,7 @@ final class ProjectCrud extends Component
     #[On('project:open-create')]
     public function openCreate(): void
     {
-        if (! Auth::user()?->can(PermissionEnum::ProjectView->value)) {
-            abort(403);
-        }
+        Gate::authorize(PermissionEnum::ProjectCreate->value);
 
         $this->resetForm();
         $this->editingId = 0;
@@ -124,6 +124,8 @@ final class ProjectCrud extends Component
     #[On('project:open-edit')]
     public function openEdit(int $id): void
     {
+        Gate::authorize(PermissionEnum::ProjectUpdate->value);
+
         $project = OperationProject::findOrFail($id);
 
         $this->editingId = $id;
@@ -155,6 +157,8 @@ final class ProjectCrud extends Component
 
     public function save(): void
     {
+        Gate::authorize($this->editingId > 0 ? PermissionEnum::ProjectUpdate->value : PermissionEnum::ProjectCreate->value);
+
         $this->validate();
 
         $data = [
@@ -206,6 +210,8 @@ final class ProjectCrud extends Component
     #[On('project:delete')]
     public function delete(int $id): void
     {
+        Gate::authorize(PermissionEnum::ProjectDelete->value);
+
         $project = OperationProject::findOrFail($id);
         $code = $project->code;
         $project->delete();
@@ -258,6 +264,8 @@ final class ProjectCrud extends Component
 
     public function addDocument(): void
     {
+        Gate::authorize($this->editingId > 0 ? PermissionEnum::ProjectUpdate->value : PermissionEnum::ProjectCreate->value);
+
         $this->validate([
             'formDocFile' => 'required|file|max:10240', // Max 10MB
             'formDocType' => 'required|string',

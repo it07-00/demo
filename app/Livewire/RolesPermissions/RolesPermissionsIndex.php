@@ -223,6 +223,9 @@ final class RolesPermissionsIndex extends Component
             ],
             'Quản trị vận hành' => [
                 PermissionEnum::ProjectView->value => 'Xem Dự án & Khách hàng',
+                PermissionEnum::ProjectCreate->value => 'Tạo dự án',
+                PermissionEnum::ProjectUpdate->value => 'Cập nhật dự án',
+                PermissionEnum::ProjectDelete->value => 'Xóa dự án',
                 PermissionEnum::ReportView->value => 'Xem Báo cáo vận hành',
                 PermissionEnum::StaffView->value => 'Xem Nhân sự & Phân công',
                 PermissionEnum::AnalyticsView->value => 'Xem KPI & Hiệu suất',

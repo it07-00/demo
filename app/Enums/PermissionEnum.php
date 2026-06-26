@@ -22,6 +22,9 @@ enum PermissionEnum: string
     case MailUpdate = 'mail.update';
     case DocumentView = 'document.view';
     case ProjectView = 'project.view';
+    case ProjectCreate = 'project.create';
+    case ProjectUpdate = 'project.update';
+    case ProjectDelete = 'project.delete';
     case StaffView = 'staff.view';
     case AnalyticsView = 'analytics.view';
     case CrmView = 'crm.view';
@@ -58,6 +61,9 @@ enum PermissionEnum: string
             self::MailUpdate => 'Cập nhật cấu hình email',
             self::DocumentView => 'Xem quy định tài liệu',
             self::ProjectView => 'Xem dự án và khách hàng vận hành',
+            self::ProjectCreate => 'Tạo dự án vận hành',
+            self::ProjectUpdate => 'Cập nhật dự án vận hành',
+            self::ProjectDelete => 'Xóa dự án vận hành',
             self::StaffView => 'Xem nhân sự và phân công vận hành',
             self::AnalyticsView => 'Xem KPI và hiệu suất vận hành',
             self::CrmView => 'Xem CRM khách hàng',
