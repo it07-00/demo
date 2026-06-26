@@ -25,7 +25,7 @@ final class DutyScheduleFactory extends Factory
             'Phỏng vấn ứng viên tuyển dụng mới',
             'Đào tạo nội bộ hệ thống CRM',
             'Thăm và làm việc tại chi nhánh',
-            'Báo cáo tài chính tháng'
+            'Báo cáo tài chính tháng',
         ];
 
         $locations = [
@@ -34,7 +34,7 @@ final class DutyScheduleFactory extends Factory
             'Văn phòng đối tác',
             'Chi nhánh Quận 1',
             'Phòng Lab Kỹ thuật',
-            'Phòng Giám đốc'
+            'Phòng Giám đốc',
         ];
 
         $colors = ['primary', 'success', 'warning', 'danger', 'info', 'purple'];

@@ -10,6 +10,7 @@ use App\Models\DailyReport;
 use App\Models\User;
 use App\Notifications\DailyReportSubmitted;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
@@ -18,9 +19,9 @@ final class DailyReportService
     /**
      * Get paginated reports, optionally filtered.
      *
-     * @param int|null $userId      Filter by specific user (null = all)
-     * @param string|null $date     Filter by specific date (Y-m-d)
-     * @param string|null $search   Search in work_done
+     * @param  int|null  $userId  Filter by specific user (null = all)
+     * @param  string|null  $date  Filter by specific date (Y-m-d)
+     * @param  string|null  $search  Search in work_done
      * @return LengthAwarePaginator<DailyReport>
      */
     public function getReports(
@@ -42,12 +43,9 @@ final class DailyReportService
     /**
      * Get reports in a date range for calendar view.
      *
-     * @param string $start
-     * @param string $end
-     * @param int|null $userId
-     * @return \Illuminate\Database\Eloquent\Collection<int, DailyReport>
+     * @return Collection<int, DailyReport>
      */
-    public function getReportsInRange(string $start, string $end, ?int $userId = null): \Illuminate\Database\Eloquent\Collection
+    public function getReportsInRange(string $start, string $end, ?int $userId = null): Collection
     {
         return DailyReport::query()
             ->with('user')
@@ -61,11 +59,11 @@ final class DailyReportService
     {
         $report = DB::transaction(function () use ($dto): DailyReport {
             return DailyReport::create([
-                'user_id'       => $dto->userId,
-                'report_date'   => $dto->reportDate,
-                'work_done'     => $dto->workDone,
+                'user_id' => $dto->userId,
+                'report_date' => $dto->reportDate,
+                'work_done' => $dto->workDone,
                 'plan_tomorrow' => $dto->planTomorrow,
-                'issues'        => $dto->issues,
+                'issues' => $dto->issues,
             ]);
         });
 
@@ -78,11 +76,12 @@ final class DailyReportService
     {
         return DB::transaction(function () use ($report, $dto): DailyReport {
             $report->update([
-                'report_date'   => $dto->reportDate,
-                'work_done'     => $dto->workDone,
+                'report_date' => $dto->reportDate,
+                'work_done' => $dto->workDone,
                 'plan_tomorrow' => $dto->planTomorrow,
-                'issues'        => $dto->issues,
+                'issues' => $dto->issues,
             ]);
+
             return $report->refresh();
         });
     }

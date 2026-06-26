@@ -25,6 +25,7 @@ final class Setting extends Model
     public static function get(string $key, mixed $default = null): mixed
     {
         $setting = self::query()->where('key', $key)->first();
+
         return $setting !== null ? $setting->value : $default;
     }
 

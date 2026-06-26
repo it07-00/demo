@@ -9,6 +9,7 @@ use App\Models\DutySchedule;
 use App\Models\User;
 use App\Notifications\DutyScheduleAssigned;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
 final class DutyScheduleService
@@ -31,9 +32,9 @@ final class DutyScheduleService
             ->when($filterUserId, static function ($query, $userId): void {
                 $query->where(static function ($q) use ($userId): void {
                     $q->where('created_by', $userId)
-                      ->orWhereHas('users', static function ($q2) use ($userId): void {
-                          $q2->where('users.id', $userId);
-                      });
+                        ->orWhereHas('users', static function ($q2) use ($userId): void {
+                            $q2->where('users.id', $userId);
+                        });
                 });
             })
             ->get();
@@ -41,7 +42,7 @@ final class DutyScheduleService
 
     public function create(DutyScheduleDTO $dto): DutySchedule
     {
-        $schedule = \Illuminate\Support\Facades\DB::transaction(function () use ($dto): DutySchedule {
+        $schedule = DB::transaction(function () use ($dto): DutySchedule {
             $schedule = DutySchedule::create([
                 'title' => $dto->title,
                 'description' => $dto->description,
@@ -67,7 +68,7 @@ final class DutyScheduleService
     {
         $previousUserIds = $schedule->users()->pluck('users.id')->toArray();
 
-        $schedule = \Illuminate\Support\Facades\DB::transaction(function () use ($schedule, $dto): DutySchedule {
+        $schedule = DB::transaction(function () use ($schedule, $dto): DutySchedule {
             $schedule->update([
                 'title' => $dto->title,
                 'description' => $dto->description,
@@ -85,7 +86,7 @@ final class DutyScheduleService
 
         // Only notify newly assigned users
         $newUserIds = array_diff($dto->userIds, $previousUserIds);
-        if (!empty($newUserIds)) {
+        if (! empty($newUserIds)) {
             $this->notifyAssignedUsers($schedule, $newUserIds);
         }
 
@@ -100,7 +101,7 @@ final class DutyScheduleService
     /**
      * Notify assigned users about a duty schedule (excluding the creator).
      *
-     * @param array<int> $userIds
+     * @param  array<int>  $userIds
      */
     private function notifyAssignedUsers(DutySchedule $schedule, array $userIds): void
     {

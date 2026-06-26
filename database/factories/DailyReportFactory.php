@@ -25,7 +25,7 @@ final class DailyReportFactory extends Factory
             'Kiểm thử tự động các tính năng, bổ sung 15 test case cho User Module.',
             'Khắc phục sự cố tải chậm trang lịch công tác, cấu hình cache.',
             'Hỗ trợ phòng kinh doanh cấu hình phần mềm CRM và đồng bộ danh bạ.',
-            'Kiểm tra định kỳ sao lưu dữ liệu, bảo mật server, dọn dẹp log file.'
+            'Kiểm tra định kỳ sao lưu dữ liệu, bảo mật server, dọn dẹp log file.',
         ];
 
         $plans = [
@@ -33,14 +33,14 @@ final class DailyReportFactory extends Factory
             'Triển khai bản vá lỗi cho khách hàng thử nghiệm trên môi trường staging.',
             'Viết bộ lọc tìm kiếm nâng cao cho báo cáo ngày và tích hợp FullCalendar.',
             'Kiểm tra lại toàn bộ quyền truy cập (Policy) của các nhóm người dùng.',
-            'Đào tạo nội bộ cho phòng kế toán sử dụng phần mềm chấm công mới.'
+            'Đào tạo nội bộ cho phòng kế toán sử dụng phần mềm chấm công mới.',
         ];
 
         $issues = [
             'Kết nối mạng nội bộ thỉnh thoảng bị gián đoạn, cần liên hệ IT support.',
             'Thiếu tài liệu hướng dẫn kỹ thuật của nhà cung cấp dịch vụ bên thứ ba.',
             'Cần làm rõ thêm yêu cầu nghiệp vụ của phòng kinh doanh về lọc báo cáo.',
-            'Không có vấn đề gì lớn.'
+            'Không có vấn đề gì lớn.',
         ];
 
         return [

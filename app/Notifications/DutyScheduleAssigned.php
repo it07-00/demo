@@ -32,7 +32,7 @@ final class DutyScheduleAssigned extends Notification
     {
         return [
             'title' => 'Phân công lịch công tác',
-            'message' => 'Bạn được phân công lịch: ' . $this->schedule->title,
+            'message' => 'Bạn được phân công lịch: '.$this->schedule->title,
             'schedule_id' => $this->schedule->id,
             'schedule_title' => $this->schedule->title,
             'creator_name' => $this->creatorName,

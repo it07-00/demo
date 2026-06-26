@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Enums\PermissionEnum;
 use App\Enums\RoleEnum;
+use App\Livewire\Settings\SettingIndex;
 use App\Models\Setting;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Artisan;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -54,7 +53,7 @@ final class SettingModuleTest extends TestCase
 
         $this->actingAs($admin);
 
-        Livewire::test(\App\Livewire\Settings\SettingIndex::class)
+        Livewire::test(SettingIndex::class)
             ->assertSet('website_name', 'Greeco Old')
             ->set('website_name', 'Greeco New')
             ->set('contact_email', 'newadmin@greeco.com')
@@ -77,7 +76,7 @@ final class SettingModuleTest extends TestCase
 
         $this->actingAs($admin);
 
-        Livewire::test(\App\Livewire\Settings\SettingIndex::class)
+        Livewire::test(SettingIndex::class)
             ->call('clearCache')
             ->assertHasNoErrors()
             ->assertSet('successMessage', 'Xóa toàn bộ cache hệ thống (Cache, View, Route, Config) thành công!');

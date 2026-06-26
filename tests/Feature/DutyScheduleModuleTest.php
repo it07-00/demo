@@ -7,11 +7,13 @@ namespace Tests\Feature;
 use App\DTOs\DutyScheduleDTO;
 use App\Enums\PermissionEnum;
 use App\Enums\RoleEnum;
+use App\Livewire\DutySchedules\DutyScheduleIndex;
 use App\Models\DutySchedule;
 use App\Models\User;
 use App\Services\DutyScheduleService;
 use Database\Seeders\PermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 final class DutyScheduleModuleTest extends TestCase
@@ -121,6 +123,7 @@ final class DutyScheduleModuleTest extends TestCase
             'id' => $updated->id,
         ]);
     }
+
     public function test_policies_allow_creators_and_admins_to_update_delete_schedules(): void
     {
         $this->seed(PermissionSeeder::class);
@@ -185,27 +188,27 @@ final class DutyScheduleModuleTest extends TestCase
 
         // 1. Staff 1 (creator) gets full details
         $this->actingAs($staff1);
-        $component1 = \Livewire\Livewire::test(\App\Livewire\DutySchedules\DutyScheduleIndex::class);
+        $component1 = Livewire::test(DutyScheduleIndex::class);
         $events1 = $component1->instance()->getEvents('2026-06-01 00:00:00', '2026-06-03 00:00:00');
         $this->assertCount(1, $events1);
         $this->assertStringContainsString('Secret Strategy Session', $events1[0]['title']);
-        $this->assertSame('🔒 ' . $staff1->name . ': Secret Strategy Session', $events1[0]['title']);
+        $this->assertSame('🔒 '.$staff1->name.': Secret Strategy Session', $events1[0]['title']);
         $this->assertSame('🔒 Secret Strategy Session', $events1[0]['raw_title']);
         $this->assertSame('Top secret details', $events1[0]['description']);
         $this->assertSame('War Room', $events1[0]['location']);
 
         // 2. Admin (authorized role) gets full details
         $this->actingAs($admin);
-        $componentAdmin = \Livewire\Livewire::test(\App\Livewire\DutySchedules\DutyScheduleIndex::class);
+        $componentAdmin = Livewire::test(DutyScheduleIndex::class);
         $eventsAdmin = $componentAdmin->instance()->getEvents('2026-06-01 00:00:00', '2026-06-03 00:00:00');
         $this->assertCount(1, $eventsAdmin);
         $this->assertStringContainsString('Secret Strategy Session', $eventsAdmin[0]['title']);
-        $this->assertSame('🔒 ' . $staff1->name . ': Secret Strategy Session', $eventsAdmin[0]['title']);
+        $this->assertSame('🔒 '.$staff1->name.': Secret Strategy Session', $eventsAdmin[0]['title']);
         $this->assertSame('🔒 Secret Strategy Session', $eventsAdmin[0]['raw_title']);
 
         // 3. Staff 2 (unauthorized) gets masked details
         $this->actingAs($staff2);
-        $component2 = \Livewire\Livewire::test(\App\Livewire\DutySchedules\DutyScheduleIndex::class);
+        $component2 = Livewire::test(DutyScheduleIndex::class);
         $events2 = $component2->instance()->getEvents('2026-06-01 00:00:00', '2026-06-03 00:00:00');
         $this->assertCount(1, $events2);
         $this->assertStringNotContainsString('Secret Strategy Session', $events2[0]['title']);
@@ -218,11 +221,11 @@ final class DutyScheduleModuleTest extends TestCase
 
         // 4. Director (authorized role via role check) gets full details
         $this->actingAs($director);
-        $componentDirector = \Livewire\Livewire::test(\App\Livewire\DutySchedules\DutyScheduleIndex::class);
+        $componentDirector = Livewire::test(DutyScheduleIndex::class);
         $eventsDirector = $componentDirector->instance()->getEvents('2026-06-01 00:00:00', '2026-06-03 00:00:00');
         $this->assertCount(1, $eventsDirector);
         $this->assertStringContainsString('Secret Strategy Session', $eventsDirector[0]['title']);
-        $this->assertSame('🔒 ' . $staff1->name . ': Secret Strategy Session', $eventsDirector[0]['title']);
+        $this->assertSame('🔒 '.$staff1->name.': Secret Strategy Session', $eventsDirector[0]['title']);
         $this->assertSame('🔒 Secret Strategy Session', $eventsDirector[0]['raw_title']);
         $this->assertSame('Top secret details', $eventsDirector[0]['description']);
         $this->assertSame('War Room', $eventsDirector[0]['location']);
@@ -249,8 +252,8 @@ final class DutyScheduleModuleTest extends TestCase
         ]);
 
         $this->actingAs($director);
-        
-        $test = \Livewire\Livewire::test(\App\Livewire\DutySchedules\DutyScheduleIndex::class)
+
+        $test = Livewire::test(DutyScheduleIndex::class)
             ->call('showDaySchedules', '2026-06-02')
             ->assertSet('selectedDateStr', '02/06/2026')
             ->assertDispatched('schedule:open-day-schedules');
@@ -275,7 +278,7 @@ final class DutyScheduleModuleTest extends TestCase
 
         $futureDate = now()->addDays(2)->format('Y-m-d\TH:i');
 
-        \Livewire\Livewire::test(\App\Livewire\DutySchedules\DutyScheduleIndex::class)
+        Livewire::test(DutyScheduleIndex::class)
             ->set('title', 'Project Sync')
             ->set('start_at', $futureDate)
             ->set('user_ids', [$participant1->id, $participant2->id])
@@ -302,7 +305,7 @@ final class DutyScheduleModuleTest extends TestCase
 
         $futureDate = now()->addDays(2)->format('Y-m-d\TH:i');
 
-        \Livewire\Livewire::test(\App\Livewire\DutySchedules\DutyScheduleIndex::class)
+        Livewire::test(DutyScheduleIndex::class)
             ->set('title', 'Director Strategy Sync')
             ->set('start_at', $futureDate)
             ->call('save')
@@ -325,7 +328,7 @@ final class DutyScheduleModuleTest extends TestCase
 
         $pastDate = now()->subDays(2)->format('Y-m-d\TH:i');
 
-        \Livewire\Livewire::test(\App\Livewire\DutySchedules\DutyScheduleIndex::class)
+        Livewire::test(DutyScheduleIndex::class)
             ->set('title', 'Past Sync')
             ->set('start_at', $pastDate)
             ->call('save')
@@ -333,7 +336,7 @@ final class DutyScheduleModuleTest extends TestCase
 
         // Check openCreate with past date triggers swal:alert and doesn't dispatch open-create
         $pastDateStr = now()->subDays(2)->format('Y-m-d');
-        \Livewire\Livewire::test(\App\Livewire\DutySchedules\DutyScheduleIndex::class)
+        Livewire::test(DutyScheduleIndex::class)
             ->call('openCreate', $pastDateStr)
             ->assertNotDispatched('schedule:open-create')
             ->assertDispatched('swal:alert');
@@ -375,7 +378,7 @@ final class DutyScheduleModuleTest extends TestCase
 
         // Filter by staff1
         $this->actingAs($staff1);
-        $component = \Livewire\Livewire::test(\App\Livewire\DutySchedules\DutyScheduleIndex::class)
+        $component = Livewire::test(DutyScheduleIndex::class)
             ->set('filterUserId', $staff1->id);
 
         $events = $component->instance()->getEvents('2026-06-02 00:00:00', '2026-06-02 23:59:59');

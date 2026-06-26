@@ -15,7 +15,7 @@ final class StorageCharsetTest extends TestCase
         Storage::fake();
 
         // 2. Put a test file with Vietnamese text
-        $content = "Dự án thử nghiệm UTF-8";
+        $content = 'Dự án thử nghiệm UTF-8';
         Storage::put('public/projects/documents/test.txt', $content);
 
         // 3. Make GET request to the custom storage route

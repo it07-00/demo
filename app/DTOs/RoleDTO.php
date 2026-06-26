@@ -12,7 +12,7 @@ final readonly class RoleDTO
     ) {}
 
     /**
-     * @param array{name?: string, description?: string|null} $data
+     * @param  array{name?: string, description?: string|null}  $data
      */
     public static function fromArray(array $data): self
     {

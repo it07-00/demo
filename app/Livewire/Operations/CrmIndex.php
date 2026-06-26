@@ -329,8 +329,8 @@ final class CrmIndex extends Component
     }
 
     /**
-     * @param Collection<int, OperationProject> $projects
-     * @param Collection<int, OperationReceivable> $receivables
+     * @param  Collection<int, OperationProject>  $projects
+     * @param  Collection<int, OperationReceivable>  $receivables
      * @return array<string, mixed>
      */
     private function customerViewModel(OperationCrmCustomer $customer, Collection $projects, Collection $receivables, CarbonImmutable $today): array
@@ -369,7 +369,7 @@ final class CrmIndex extends Component
     }
 
     /**
-     * @param \Illuminate\Support\Collection<int, array<string, mixed>> $customers
+     * @param  \Illuminate\Support\Collection<int, array<string, mixed>>  $customers
      * @return array<string, int>
      */
     private function summary(\Illuminate\Support\Collection $customers): array

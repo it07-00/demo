@@ -147,7 +147,7 @@ final class RecruitmentReportCrud extends Component
             $message = 'Đã cập nhật báo cáo tuyển dụng.';
         } else {
             OperationRecruitmentReport::create($data);
-            $message = 'Đã tạo báo cáo tuyển dụng ngày ' . $this->formDate;
+            $message = 'Đã tạo báo cáo tuyển dụng ngày '.$this->formDate;
         }
 
         $this->showModal = false;

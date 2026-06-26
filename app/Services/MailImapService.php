@@ -366,7 +366,7 @@ final class MailImapService
 
             [$partHeadersRaw, $partBodyRaw] = $this->splitHeadersAndBody($section);
             $partHeaders = $this->parseHeaders($partHeadersRaw);
-            
+
             $partContentTypeRaw = $partHeaders['content-type'] ?? 'text/plain';
             $partContentType = strtolower($partContentTypeRaw);
             $partDisposition = strtolower($partHeaders['content-disposition'] ?? '');

@@ -32,7 +32,7 @@ final class DailyReportSubmitted extends Notification
     {
         return [
             'title' => 'Báo cáo ngày mới',
-            'message' => $this->reporterName . ' đã gửi báo cáo ngày ' . $this->report->report_date->format('d/m/Y'),
+            'message' => $this->reporterName.' đã gửi báo cáo ngày '.$this->report->report_date->format('d/m/Y'),
             'report_id' => $this->report->id,
             'reporter_name' => $this->reporterName,
             'report_date' => $this->report->report_date->toDateString(),

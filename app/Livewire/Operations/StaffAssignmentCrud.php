@@ -7,19 +7,22 @@ namespace App\Livewire\Operations;
 use App\Models\OperationProject;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
-use Livewire\Component;
 use Livewire\Attributes\On;
+use Livewire\Component;
 
 final class StaffAssignmentCrud extends Component
 {
     public bool $showModal = false;
 
     public ?string $selectedName = null;
+
     public ?int $userId = null;
 
     // User fields
     public string $formRole = '';
+
     public string $formBranch = '';
+
     public string $formStatus = 'Chính thức';
 
     // Checked project IDs
@@ -80,22 +83,23 @@ final class StaffAssignmentCrud extends Component
 
     private function loadAssignments(): void
     {
-        if (!$this->selectedName) {
+        if (! $this->selectedName) {
             $this->assignedProjects = [];
+
             return;
         }
 
         if ($this->formRole === 'Quản lý vận hành') {
             $this->assignedProjects = OperationProject::where('manager_name', $this->selectedName)
                 ->pluck('id')
-                ->map(fn($id) => (string)$id)
+                ->map(fn ($id) => (string) $id)
                 ->toArray();
         } elseif ($this->formRole === 'Chuyên viên vận hành') {
             $projects = OperationProject::all();
             $this->assignedProjects = [];
             foreach ($projects as $project) {
                 if (is_array($project->team) && in_array($this->selectedName, $project->team, true)) {
-                    $this->assignedProjects[] = (string)$project->id;
+                    $this->assignedProjects[] = (string) $project->id;
                 }
             }
         } else {
@@ -126,16 +130,18 @@ final class StaffAssignmentCrud extends Component
 
             $this->saveAssignments($user->name);
 
-            $message = 'Đã cập nhật phân công cho nhân sự ' . $user->name;
+            $message = 'Đã cập nhật phân công cho nhân sự '.$user->name;
         } else {
-            if (!$this->selectedName) {
+            if (! $this->selectedName) {
                 $this->addError('selectedName', 'Vui lòng chọn một nhân viên.');
+
                 return;
             }
 
             $user = User::where('name', $this->selectedName)->first();
-            if (!$user) {
+            if (! $user) {
                 $this->addError('selectedName', 'Không tìm thấy nhân viên này.');
+
                 return;
             }
 
@@ -150,7 +156,7 @@ final class StaffAssignmentCrud extends Component
 
             $this->saveAssignments($user->name);
 
-            $message = 'Đã thêm ' . $user->name . ' vào đội ngũ vận hành.';
+            $message = 'Đã thêm '.$user->name.' vào đội ngũ vận hành.';
         }
 
         $this->showModal = false;
@@ -178,7 +184,7 @@ final class StaffAssignmentCrud extends Component
                 ->update([
                     'manager_name' => 'Chưa phân công',
                     'manager_external_id' => 'M0',
-                    'unassigned' => true
+                    'unassigned' => true,
                 ]);
 
             // Assign this manager to checked projects
@@ -186,8 +192,8 @@ final class StaffAssignmentCrud extends Component
                 OperationProject::whereIn('id', $projectIds)
                     ->update([
                         'manager_name' => $name,
-                        'manager_external_id' => 'M' . $this->userId,
-                        'unassigned' => false
+                        'manager_external_id' => 'M'.$this->userId,
+                        'unassigned' => false,
                     ]);
             }
         } elseif ($this->formRole === 'Chuyên viên vận hành') {
@@ -198,11 +204,11 @@ final class StaffAssignmentCrud extends Component
                 $inAssigned = in_array($project->id, $projectIds, true);
                 $inTeam = in_array($name, $team, true);
 
-                if ($inAssigned && !$inTeam) {
+                if ($inAssigned && ! $inTeam) {
                     $team[] = $name;
                     $project->update(['team' => array_values($team)]);
-                } elseif (!$inAssigned && $inTeam) {
-                    $team = array_filter($team, fn($t) => $t !== $name);
+                } elseif (! $inAssigned && $inTeam) {
+                    $team = array_filter($team, fn ($t) => $t !== $name);
                     $project->update(['team' => array_values($team)]);
                 }
             }

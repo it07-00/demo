@@ -40,6 +40,7 @@ class ResetPasswordCommand extends Command
 
         if (! $identifier) {
             $this->error('Username or email is required.');
+
             return self::FAILURE;
         }
 
@@ -50,6 +51,7 @@ class ResetPasswordCommand extends Command
 
         if (! $user) {
             $this->error("User not found with email or username: {$identifier}");
+
             return self::FAILURE;
         }
 
@@ -57,6 +59,7 @@ class ResetPasswordCommand extends Command
         if ($this->option('default')) {
             $userService->resetPasswordToDefault($user);
             $this->info("Password for user '{$user->name}' ({$user->username}) has been reset to default: ".UserService::DEFAULT_RESET_PASSWORD);
+
             return self::SUCCESS;
         }
 
@@ -64,9 +67,10 @@ class ResetPasswordCommand extends Command
 
         if (! $password) {
             $password = $this->secret('Enter the new password');
-            
+
             if (! $password) {
                 $this->error('Password cannot be empty.');
+
                 return self::FAILURE;
             }
 
@@ -74,6 +78,7 @@ class ResetPasswordCommand extends Command
 
             if ($password !== $confirmPassword) {
                 $this->error('Passwords do not match.');
+
                 return self::FAILURE;
             }
         }

@@ -281,7 +281,7 @@ final class WorkProgressIndex extends Component
         $this->dispatch('swal:alert', [
             'icon' => 'success',
             'title' => 'Thành công!',
-            'text' => 'Đã lưu tiến độ ngày ' . $this->entryDate,
+            'text' => 'Đã lưu tiến độ ngày '.$this->entryDate,
             'toast' => true,
             'position' => 'top-end',
             'timer' => 3000,

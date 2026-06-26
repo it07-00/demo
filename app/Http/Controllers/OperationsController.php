@@ -173,8 +173,8 @@ final class OperationsController extends Controller
     }
 
     /**
-     * @param array<int, array<string, mixed>> $projects
-     * @param array{q: string, branch: string, status: string, type: string, view: string} $filters
+     * @param  array<int, array<string, mixed>>  $projects
+     * @param  array{q: string, branch: string, status: string, type: string, view: string}  $filters
      * @return array<int, array<string, mixed>>
      */
     private function filterProjects(array $projects, array $filters): array
@@ -205,8 +205,8 @@ final class OperationsController extends Controller
     }
 
     /**
-     * @param array<int, array<string, mixed>> $history
-     * @param array{date: string, project: string, branch: string} $filters
+     * @param  array<int, array<string, mixed>>  $history
+     * @param  array{date: string, project: string, branch: string}  $filters
      * @return array<int, array<string, mixed>>
      */
     private function filterReportHistory(array $history, array $filters): array
@@ -221,7 +221,7 @@ final class OperationsController extends Controller
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      * @return array<int, array{name: string, fill: float, operating: int, total: int}>
      */
     private function managerStats(array $data): array
@@ -249,7 +249,7 @@ final class OperationsController extends Controller
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      * @return array<int, array{branch: string, count: int, fill: float}>
      */
     private function branchStats(array $data): array
@@ -273,7 +273,7 @@ final class OperationsController extends Controller
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      * @return array<int, array{name: string, branch: string, started: int, conversion: float, projects: int, grade: string}>
      */
     private function specialistRank(array $data): array
@@ -311,7 +311,7 @@ final class OperationsController extends Controller
     }
 
     /**
-     * @param array<int, array<string, mixed>> $items
+     * @param  array<int, array<string, mixed>>  $items
      */
     private function findById(array $items, string $id): ?array
     {
@@ -325,7 +325,7 @@ final class OperationsController extends Controller
     }
 
     /**
-     * @param array<int, array<string, mixed>> $items
+     * @param  array<int, array<string, mixed>>  $items
      */
     private function findByName(array $items, string $name): ?array
     {
@@ -339,7 +339,7 @@ final class OperationsController extends Controller
     }
 
     /**
-     * @param array<int, array<string, mixed>> $items
+     * @param  array<int, array<string, mixed>>  $items
      */
     private function firstSorted(array $items, string $key): array
     {

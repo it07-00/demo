@@ -23,8 +23,11 @@ final class SettingIndex extends Component
 
     // Settings fields
     public string $website_name = '';
+
     public string $contact_email = '';
+
     public string $timezone = '';
+
     public string $language = '';
 
     // Status message
@@ -80,18 +83,18 @@ final class SettingIndex extends Component
             $result = \DB::select('SHOW TABLES');
 
             foreach ($result as $row) {
-                $tables[] = current((array)$row);
+                $tables[] = current((array) $row);
             }
 
             $sql = "-- TTVH-TC Database Backup\n";
-            $sql .= "-- Date: " . date('Y-m-d H:i:s') . "\n\n";
+            $sql .= '-- Date: '.date('Y-m-d H:i:s')."\n\n";
             $sql .= "SET FOREIGN_KEY_CHECKS=0;\n\n";
 
             foreach ($tables as $table) {
                 // Get table structure
                 $createStatement = \DB::select("SHOW CREATE TABLE `$table`")[0]->{'Create Table'};
                 $sql .= "DROP TABLE IF EXISTS `$table`;\n";
-                $sql .= $createStatement . ";\n\n";
+                $sql .= $createStatement.";\n\n";
 
                 // Get table data
                 $rows = \DB::table($table)->get();
@@ -100,35 +103,35 @@ final class SettingIndex extends Component
                     $insertRows = [];
                     foreach ($rows as $row) {
                         $values = [];
-                        foreach ((array)$row as $val) {
+                        foreach ((array) $row as $val) {
                             if (is_null($val)) {
                                 $values[] = 'NULL';
                             } else {
-                                $values[] = "'" . addslashes((string)$val) . "'";
+                                $values[] = "'".addslashes((string) $val)."'";
                             }
                         }
-                        $insertRows[] = "(" . implode(', ', $values) . ")";
+                        $insertRows[] = '('.implode(', ', $values).')';
                     }
-                    $sql .= implode(",\n", $insertRows) . ";\n\n";
+                    $sql .= implode(",\n", $insertRows).";\n\n";
                 }
             }
 
             $sql .= "SET FOREIGN_KEY_CHECKS=1;\n";
 
             $backupDir = storage_path('app/backups');
-            if (!file_exists($backupDir)) {
+            if (! file_exists($backupDir)) {
                 mkdir($backupDir, 0755, true);
             }
 
-            $filename = 'backup-' . date('Y-m-d-H-i-s') . '.sql';
-            $filepath = $backupDir . '/' . $filename;
+            $filename = 'backup-'.date('Y-m-d-H-i-s').'.sql';
+            $filepath = $backupDir.'/'.$filename;
             file_put_contents($filepath, $sql);
 
             ActivityLogger::log('backup_db', 'Đã tải bản sao lưu cơ sở dữ liệu (SQL)');
 
             return response()->download($filepath);
         } catch (\Exception $e) {
-            $this->successMessage = 'Lỗi khi tạo bản sao lưu: ' . $e->getMessage();
+            $this->successMessage = 'Lỗi khi tạo bản sao lưu: '.$e->getMessage();
         }
     }
 
@@ -143,7 +146,7 @@ final class SettingIndex extends Component
 
         return response()->streamDownload(function () use ($json) {
             echo $json;
-        }, 'ttvh-tc-settings-' . date('Y-m-d') . '.json', [
+        }, 'ttvh-tc-settings-'.date('Y-m-d').'.json', [
             'Content-Type' => 'application/json',
         ]);
     }
@@ -153,21 +156,21 @@ final class SettingIndex extends Component
         Gate::authorize('update', Setting::class);
 
         try {
-            $zip = new \ZipArchive();
+            $zip = new \ZipArchive;
             $zipDir = storage_path('app/backups');
-            if (!file_exists($zipDir)) {
+            if (! file_exists($zipDir)) {
                 mkdir($zipDir, 0755, true);
             }
-            
-            $filename = 'ttvh-tc-source-' . date('Y-m-d-H-i-s') . '.zip';
-            $filepath = $zipDir . '/' . $filename;
+
+            $filename = 'ttvh-tc-source-'.date('Y-m-d-H-i-s').'.zip';
+            $filepath = $zipDir.'/'.$filename;
 
             if ($zip->open($filepath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
                 throw new \Exception('Không thể tạo file ZIP.');
             }
 
             $basePath = base_path();
-            
+
             $dirs = [
                 'app',
                 'bootstrap',
@@ -176,12 +179,14 @@ final class SettingIndex extends Component
                 'public',
                 'resources',
                 'routes',
-                'tests'
+                'tests',
             ];
 
             foreach ($dirs as $dir) {
-                $dirPath = $basePath . DIRECTORY_SEPARATOR . $dir;
-                if (!file_exists($dirPath)) continue;
+                $dirPath = $basePath.DIRECTORY_SEPARATOR.$dir;
+                if (! file_exists($dirPath)) {
+                    continue;
+                }
 
                 $files = new \RecursiveIteratorIterator(
                     new \RecursiveDirectoryIterator($dirPath),
@@ -189,7 +194,7 @@ final class SettingIndex extends Component
                 );
 
                 foreach ($files as $name => $file) {
-                    if (!$file->isDir()) {
+                    if (! $file->isDir()) {
                         $filePath = $file->getRealPath();
                         $relativePath = substr($filePath, strlen($basePath) + 1);
 
@@ -209,11 +214,11 @@ final class SettingIndex extends Component
                 'vite.config.js',
                 'artisan',
                 '.env.example',
-                'README.md'
+                'README.md',
             ];
 
             foreach ($rootFiles as $file) {
-                $filePath = $basePath . DIRECTORY_SEPARATOR . $file;
+                $filePath = $basePath.DIRECTORY_SEPARATOR.$file;
                 if (file_exists($filePath)) {
                     $zip->addFile($filePath, $file);
                 }
@@ -231,7 +236,7 @@ final class SettingIndex extends Component
 
             return response()->download($filepath)->deleteFileAfterSend(true);
         } catch (\Exception $e) {
-            $this->successMessage = 'Lỗi khi sao lưu mã nguồn: ' . $e->getMessage();
+            $this->successMessage = 'Lỗi khi sao lưu mã nguồn: '.$e->getMessage();
             $this->dispatch('swal:alert', [
                 'icon' => 'error',
                 'title' => 'Thất bại!',
@@ -258,7 +263,7 @@ final class SettingIndex extends Component
                 'text' => $this->successMessage,
             ]);
         } catch (\Exception $e) {
-            $this->successMessage = 'Lỗi khi xóa cache: ' . $e->getMessage();
+            $this->successMessage = 'Lỗi khi xóa cache: '.$e->getMessage();
             $this->dispatch('swal:alert', [
                 'icon' => 'error',
                 'title' => 'Thất bại!',

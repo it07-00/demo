@@ -7,6 +7,7 @@ namespace App\Support;
 use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 final class ActivityLogger
 {
@@ -14,7 +15,7 @@ final class ActivityLogger
     {
         try {
             $user = $user ?? Auth::user();
-            
+
             $ipAddress = request() ? request()->ip() : null;
             $userAgent = request() ? request()->userAgent() : null;
 
@@ -27,8 +28,8 @@ final class ActivityLogger
                 'user_agent' => $userAgent,
             ]);
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::error('ActivityLogger failed: ' . $e->getMessage(), [
-                'exception' => $e
+            Log::error('ActivityLogger failed: '.$e->getMessage(), [
+                'exception' => $e,
             ]);
         }
     }

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use App\Models\DutySchedule;
+use App\Enums\RoleEnum;
 use App\Models\DailyReport;
+use App\Models\DutySchedule;
+use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -20,7 +21,7 @@ final class DashboardModuleTest extends TestCase
         $this->seed(PermissionSeeder::class);
 
         $user = User::factory()->create();
-        $user->assignRole(\App\Enums\RoleEnum::SuperAdmin->value);
+        $user->assignRole(RoleEnum::SuperAdmin->value);
 
         // Create some reports and schedules for today
         DailyReport::create([

@@ -9,14 +9,14 @@ use App\Models\OperationProject;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Component;
-
 use Livewire\Attributes\On;
+use Livewire\Component;
 use Livewire\WithFileUploads;
 
 final class ProjectCrud extends Component
 {
     use WithFileUploads;
+
     public bool $showModal = false;
 
     public int $editingId = 0;
@@ -63,7 +63,9 @@ final class ProjectCrud extends Component
 
     // File upload properties
     public $formDocFile;
+
     public string $formDocType = 'Hợp đồng';
+
     public array $formDocs = [];
 
     protected function rules(): array
@@ -182,11 +184,11 @@ final class ProjectCrud extends Component
         if ($this->editingId > 0) {
             $project = OperationProject::findOrFail($this->editingId);
             $project->update($data);
-            $message = 'Đã cập nhật dự án ' . $this->formCode;
+            $message = 'Đã cập nhật dự án '.$this->formCode;
         } else {
-            $data['external_id'] = 'P' . str_pad((string) (OperationProject::max('id') + 1), 3, '0', STR_PAD_LEFT);
+            $data['external_id'] = 'P'.str_pad((string) (OperationProject::max('id') + 1), 3, '0', STR_PAD_LEFT);
             OperationProject::create($data);
-            $message = 'Đã tạo dự án ' . $this->formCode;
+            $message = 'Đã tạo dự án '.$this->formCode;
         }
 
         $this->showModal = false;
@@ -211,7 +213,7 @@ final class ProjectCrud extends Component
         $this->dispatch('swal:alert', [
             'icon' => 'success',
             'title' => 'Đã xóa!',
-            'text' => 'Dự án ' . $code . ' đã bị xóa.',
+            'text' => 'Dự án '.$code.' đã bị xóa.',
             'toast' => true,
             'position' => 'top-end',
             'timer' => 3000,

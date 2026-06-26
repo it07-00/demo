@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Models\User;
 use App\Models\OperationCrmCustomer;
 use App\Models\OperationProject;
 use App\Models\OperationReceivable;
 use App\Models\OperationRecruitmentReport;
 use App\Models\OperationResponsibility;
+use App\Models\User;
 use Carbon\CarbonImmutable;
 
 final class OperationDataService
@@ -155,7 +155,7 @@ final class OperationDataService
     }
 
     /**
-     * @param array<int, array<string, mixed>> $projects
+     * @param  array<int, array<string, mixed>>  $projects
      * @return array<int, array<string, mixed>>
      */
     private function databaseReportHistory(array $projects): array
@@ -228,8 +228,8 @@ final class OperationDataService
     }
 
     /**
-     * @param array<int, array<string, mixed>> $projects
-     * @param array<int, array<string, mixed>> $receivables
+     * @param  array<int, array<string, mixed>>  $projects
+     * @param  array<int, array<string, mixed>>  $receivables
      * @return array<int, array<string, mixed>>
      */
     private function databaseCrmCustomers(array $projects, array $receivables): array
@@ -381,7 +381,7 @@ final class OperationDataService
     }
 
     /**
-     * @param array<int, array<string, string>> $staffDirectory
+     * @param  array<int, array<string, string>>  $staffDirectory
      * @return list<string>
      */
     private function branches(array $staffDirectory): array
@@ -436,8 +436,8 @@ final class OperationDataService
     }
 
     /**
-     * @param array<int, array<string, string>> $staffDirectory
-     * @param array<int, array<string, mixed>> $projects
+     * @param  array<int, array<string, string>>  $staffDirectory
+     * @param  array<int, array<string, mixed>>  $projects
      * @return array<int, array{id: string, name: string, count: int, branch: string, unassigned?: bool}>
      */
     private function managers(array $staffDirectory, array $projects = []): array
@@ -470,7 +470,7 @@ final class OperationDataService
 
         $unassignedCount = 0;
         if ($projects !== []) {
-            $unassignedCount = count(array_filter($projects, static fn (array $p): bool => (bool)($p['unassigned'] ?? false) || $p['manager_name'] === 'Chưa phân công' || $p['manager_id'] === 'M0'));
+            $unassignedCount = count(array_filter($projects, static fn (array $p): bool => (bool) ($p['unassigned'] ?? false) || $p['manager_name'] === 'Chưa phân công' || $p['manager_id'] === 'M0'));
         } else {
             $unassignedCount = 3;
         }
@@ -487,7 +487,7 @@ final class OperationDataService
     }
 
     /**
-     * @param array<int, array<string, string>> $staffDirectory
+     * @param  array<int, array<string, string>>  $staffDirectory
      * @return list<string>
      */
     private function specialists(array $staffDirectory): array
@@ -499,9 +499,9 @@ final class OperationDataService
     }
 
     /**
-     * @param array<int, array<string, mixed>> $managers
-     * @param list<string> $specialists
-     * @param list<string> $branches
+     * @param  array<int, array<string, mixed>>  $managers
+     * @param  list<string>  $specialists
+     * @param  list<string>  $branches
      * @return array<int, array<string, mixed>>
      */
     private function projects(
@@ -590,7 +590,7 @@ final class OperationDataService
     }
 
     /**
-     * @param array<int, array<string, mixed>> $projects
+     * @param  array<int, array<string, mixed>>  $projects
      * @return array<int, array<string, mixed>>
      */
     private function todayLogs(array &$projects, CarbonImmutable $today): array
@@ -643,7 +643,7 @@ final class OperationDataService
     }
 
     /**
-     * @param array<int, array<string, mixed>> $projects
+     * @param  array<int, array<string, mixed>>  $projects
      * @return array<int, array<string, mixed>>
      */
     private function reportHistory(array $projects, CarbonImmutable $today): array
@@ -729,8 +729,8 @@ final class OperationDataService
     }
 
     /**
-     * @param array<int, array<string, mixed>> $projects
-     * @param array<int, array<string, mixed>> $receivables
+     * @param  array<int, array<string, mixed>>  $projects
+     * @param  array<int, array<string, mixed>>  $receivables
      * @return array<int, array<string, mixed>>
      */
     private function crmCustomers(array $projects, array $receivables, CarbonImmutable $today): array
@@ -790,26 +790,26 @@ final class OperationDataService
     private function dailySeries(CarbonImmutable $today): array
     {
         $series = [];
-        
+
         $dbData = OperationRecruitmentReport::query()
             ->selectRaw('report_date, SUM(started) as total_started, SUM(demand) as total_demand, SUM(registered) as total_registered')
             ->where('report_date', '>=', $today->subDays(29)->toDateString())
             ->where('report_date', '<=', $today->toDateString())
             ->groupBy('report_date')
             ->get()
-            ->keyBy(fn($r) => $r->report_date->toDateString());
+            ->keyBy(fn ($r) => $r->report_date->toDateString());
 
         for ($day = 29; $day >= 0; $day--) {
             $date = $today->subDays($day);
             $dateKey = $date->toDateString();
-            
+
             $record = $dbData->get($dateKey);
-            
-            if ($record && (int)$record->total_demand > 0) {
-                $target = (int)$record->total_demand;
-                $actual = (int)$record->total_started;
-                $absent = (int)round($actual * 0.05);
-                $newIn = (int)$record->total_registered;
+
+            if ($record && (int) $record->total_demand > 0) {
+                $target = (int) $record->total_demand;
+                $actual = (int) $record->total_started;
+                $absent = (int) round($actual * 0.05);
+                $newIn = (int) $record->total_registered;
             } else {
                 $weekendDrop = $date->dayOfWeek === 0 ? 0.86 : 1;
                 $trend = 1 + ((29 - $day) * 0.004);
@@ -838,25 +838,25 @@ final class OperationDataService
     {
         $months = [];
         $start = now()->subMonths(11);
-        
+
         for ($i = 0; $i < 12; $i++) {
             $monthDate = $start->copy()->addMonths($i);
-            $monthLabel = 'T' . $monthDate->month . '/' . $monthDate->format('y');
-            
+            $monthLabel = 'T'.$monthDate->month.'/'.$monthDate->format('y');
+
             $monthStart = $monthDate->startOfMonth()->toDateString();
             $monthEnd = $monthDate->endOfMonth()->toDateString();
-            
+
             $totalProjects = OperationProject::query()
                 ->where('contract_start', '<=', $monthEnd)
                 ->where('contract_end', '>=', $monthStart)
                 ->count();
-                
+
             $operatingProjects = OperationProject::query()
                 ->where('contract_start', '<=', $monthEnd)
                 ->where('contract_end', '>=', $monthStart)
                 ->where('status', 'Đang vận hành')
                 ->count();
-                
+
             if ($totalProjects === 0) {
                 $seedMap = [
                     'T7/25' => [22, 16],
@@ -875,23 +875,23 @@ final class OperationDataService
                 $totalProjects = $seedMap[$monthLabel][0] ?? 20;
                 $operatingProjects = $seedMap[$monthLabel][1] ?? 15;
             }
-            
+
             $months[] = [
                 'month' => $monthLabel,
                 'projects' => $totalProjects,
                 'operating' => $operatingProjects,
             ];
         }
-        
+
         return $months;
     }
 
     /**
-     * @param array<int, array<string, mixed>> $projects
-     * @param array<int, array<string, mixed>> $todayLogs
-     * @param array<int, array<string, mixed>> $managers
-     * @param list<string> $specialists
-     * @param array<int, array<string, string>> $staffDirectory
+     * @param  array<int, array<string, mixed>>  $projects
+     * @param  array<int, array<string, mixed>>  $todayLogs
+     * @param  array<int, array<string, mixed>>  $managers
+     * @param  list<string>  $specialists
+     * @param  array<int, array<string, string>>  $staffDirectory
      * @return array<int, array<string, mixed>>
      */
     private function staff(array $projects, array $todayLogs, array $managers, array $specialists, array $staffDirectory): array
@@ -941,9 +941,9 @@ final class OperationDataService
     }
 
     /**
-     * @param array<int, array<string, mixed>> $projects
-     * @param array<int, array<string, mixed>> $receivables
-     * @param array<int, array<string, mixed>> $managers
+     * @param  array<int, array<string, mixed>>  $projects
+     * @param  array<int, array<string, mixed>>  $receivables
+     * @param  array<int, array<string, mixed>>  $managers
      * @return array<int, array<string, mixed>>
      */
     private function alerts(array $projects, array $receivables, array $managers, array $status, CarbonImmutable $today): array
@@ -1027,7 +1027,7 @@ final class OperationDataService
     }
 
     /**
-     * @param array<int, array<string, mixed>> $projects
+     * @param  array<int, array<string, mixed>>  $projects
      * @return array<string, int|float>
      */
     public function kpiFor(array $projects, array $status): array
@@ -1068,7 +1068,7 @@ final class OperationDataService
     }
 
     /**
-     * @param array<int, array<string, mixed>> $items
+     * @param  array<int, array<string, mixed>>  $items
      */
     private function average(array $items, string $key): int
     {
@@ -1080,7 +1080,7 @@ final class OperationDataService
     }
 
     /**
-     * @param array<int, array<string, mixed>> $items
+     * @param  array<int, array<string, mixed>>  $items
      * @return array<string, int>
      */
     private function countBy(array $items, string $key): array
@@ -1096,7 +1096,7 @@ final class OperationDataService
     }
 
     /**
-     * @param array<int, array<string, string>> $staffDirectory
+     * @param  array<int, array<string, string>>  $staffDirectory
      */
     private function staffBranch(string $name, array $staffDirectory): ?string
     {
@@ -1110,7 +1110,7 @@ final class OperationDataService
     }
 
     /**
-     * @param array<int, array<string, string>> $staffDirectory
+     * @param  array<int, array<string, string>>  $staffDirectory
      */
     private function employmentStatus(string $name, array $staffDirectory): string
     {
