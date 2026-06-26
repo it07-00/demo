@@ -1,0 +1,35 @@
+.transition-hover {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+.dashboard-page {
+    display: flow-root;
+}
+
+.dashboard-page .card {
+    --bs-card-height: auto;
+    height: auto !important;
+}
+
+.dashboard-page .dashboard-stat-card {
+    min-height: 165px;
+}
+
+.dashboard-page .dashboard-side-card {
+    max-height: none;
+}
+
+.dashboard-page .progress-sm {
+    height: 5px;
+}
+
+@media (min-width: 1400px) {
+    .dashboard-page .dashboard-main-row {
+        align-items: flex-start;
+    }
+}

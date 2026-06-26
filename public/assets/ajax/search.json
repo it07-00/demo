@@ -1,0 +1,16 @@
+{
+  "listItems": [
+    {
+      "name": "Dashboard",
+      "url": "/dashboard",
+      "category": "Dashboards",
+      "icon": "fi fi-rr-apps"
+    },
+    {
+      "name": "Users Index",
+      "url": "/users",
+      "category": "Management",
+      "icon": "fi fi-rr-user"
+    }
+  ]
+}

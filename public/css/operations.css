@@ -1,0 +1,141 @@
+.operation-page {
+    display: flow-root;
+}
+
+.operation-page .card {
+    --bs-card-height: auto;
+}
+
+.operation-kpi-card {
+    min-height: 132px;
+}
+
+.operation-kpi-icon {
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+    font-size: 1.2rem;
+}
+
+.operation-progress {
+    height: 0.5rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--bs-light);
+}
+
+.operation-progress-bar {
+    height: 100%;
+    border-radius: inherit;
+}
+
+.operation-avatar {
+    width: 2rem;
+    height: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.operation-avatar-sm {
+    width: 1.65rem;
+    height: 1.65rem;
+    font-size: 0.62rem;
+}
+
+.operation-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.operation-status-dot {
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 999px;
+}
+
+.operation-chip {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 0.2rem 0.55rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+.operation-card-hover {
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.operation-card-hover:hover {
+    transform: translateY(-2px);
+    border-color: rgba(var(--bs-primary-rgb), 0.35) !important;
+    box-shadow: 0 0.75rem 1.5rem rgba(15, 23, 42, 0.08) !important;
+}
+
+.operation-chart {
+    position: relative;
+    min-height: 280px;
+}
+
+.operation-chart-sm {
+    position: relative;
+    min-height: 235px;
+}
+
+.operation-scroll {
+    max-height: 520px;
+    overflow: auto;
+}
+
+.operation-timeline {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.operation-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+}
+
+.operation-step-index {
+    width: 1.45rem;
+    height: 1.45rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+.operation-pipeline-column {
+    border-top-width: 4px !important;
+    background: rgba(var(--bs-light-rgb), 0.55);
+}
+
+.operation-alert-card {
+    border-left-width: 4px !important;
+}
+
+@media (max-width: 767.98px) {
+    .operation-kpi-card {
+        min-height: 118px;
+    }
+}
