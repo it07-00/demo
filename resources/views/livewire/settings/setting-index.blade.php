@@ -30,9 +30,9 @@
                         <li class="nav-item">
                             <a class="nav-link active fw-semibold px-3" data-bs-toggle="tab" href="#general" role="tab">Tổng quan</a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link fw-semibold px-3" data-bs-toggle="tab" href="#backup" role="tab">Sao lưu & Bộ nhớ đệm</a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item">
                             <a class="nav-link fw-semibold px-3" data-bs-toggle="tab" href="#logs" role="tab">Nhật ký hoạt động</a>
                         </li>
@@ -78,7 +78,7 @@
                                 </div>
                             </div>
  
-                            <!-- Tab: Backup -->
+                            {{-- <!-- Tab: Backup -->
                             <div class="tab-pane fade" id="backup" role="tabpanel" wire:ignore.self>
                                 <h5 class="fw-bold mb-4 text-dark"><i class="fi fi-rr-database me-2 text-primary"></i>Sao lưu & Dữ liệu</h5>
                                 <p class="text-muted small">Sao lưu dữ liệu định kỳ giúp bảo vệ hệ thống khỏi mất mát dữ liệu.</p>
@@ -96,7 +96,7 @@
                                         <i class="fi fi-rr-trash me-1"></i> Xóa toàn bộ Cache ứng dụng
                                     </button>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <!-- Tab: Logs -->
                             <div class="tab-pane fade" id="logs" role="tabpanel" wire:ignore.self>
