@@ -15,6 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(PermissionSeeder::class);
         $this->call(SampleDataSeeder::class);
-        $this->call(OperationDataSeeder::class);
+        $this->call(GoogleSheetSeeder::class);
     }
 }

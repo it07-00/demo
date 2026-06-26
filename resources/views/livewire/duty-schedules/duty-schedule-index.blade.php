@@ -1,14 +1,14 @@
-﻿<div>
+<div>
     <div class="app-page-head d-flex align-items-center justify-content-between">
         <div class="clearfix">
-            <h1 class="app-page-title">Lá»‹ch cÃ´ng tÃ¡c</h1>
+            <h1 class="app-page-title">Lịch công tác</h1>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item">
                         <a href="{{ route('dashboard') }}">Dashboard</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        Lá»‹ch cÃ´ng tÃ¡c
+                        Lịch công tác
                     </li>
                 </ol>
             </nav>
@@ -20,7 +20,7 @@
                 wire:click="openCreate('{{ date('Y-m-d') }}')"
                 wire:loading.attr="disabled"
             >
-                <i class="fi fi-rr-plus me-1"></i> ThÃªm lá»‹ch cÃ´ng tÃ¡c
+                <i class="fi fi-rr-plus me-1"></i> Thêm lịch công tác
             </button>
         @endcan
     </div>
@@ -32,14 +32,14 @@
         </div>
     @endif
 
-    {{-- â”€â”€ Filter Bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ --}}
+    {{-- ── Filter Bar ───────────────────────────────────────────────────────── --}}
     <div class="card mb-3">
         <div class="card-body py-2">
             <div class="row g-2 align-items-center">
                 <div class="col-sm-auto">
-                    <label class="form-label mb-0 text-muted small">NgÆ°á»i táº¡o / NgÆ°á»i tham gia</label>
+                    <label class="form-label mb-0 text-muted small">Người tạo / Người tham gia</label>
                     <select class="form-select form-select-sm" wire:model.live="filterUserId" id="filterParticipant" style="min-width: 220px;">
-                        <option value="0">Táº¥t cáº£ thÃ nh viÃªn</option>
+                        <option value="0">Tất cả thành viên</option>
                         @foreach ($users as $u)
                             <option value="{{ $u->id }}">{{ $u->name }}</option>
                         @endforeach
@@ -74,7 +74,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title fw-bold text-dark" id="modalAddEventLabel">
-                        {{ $scheduleId ? 'Cáº­p nháº­t lá»‹ch cÃ´ng tÃ¡c' : 'ThÃªm lá»‹ch cÃ´ng tÃ¡c' }}
+                        {{ $scheduleId ? 'Cập nhật lịch công tác' : 'Thêm lịch công tác' }}
                     </h5>
                     <button
                         type="button"
@@ -88,26 +88,26 @@
                     <form wire:submit.prevent="save">
                         <div class="row">
                             <div class="col-12 mb-3">
-                                <label class="form-label fw-semibold">TiÃªu Ä‘á» <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold">Tiêu đề <span class="text-danger">*</span></label>
                                 <input
                                     type="text"
                                     wire:model="title"
                                     class="form-control @error('title') is-invalid @enderror"
-                                    placeholder="Nháº­p tiÃªu Ä‘á» cÃ´ng viá»‡c..."
+                                    placeholder="Nhập tiêu đề công việc..."
                                 />
                                 @error('title')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-12 mb-3">
-                                <label class="form-label fw-semibold">NhÃ£n mÃ u sáº¯c <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold">Nhãn màu sắc <span class="text-danger">*</span></label>
                                 <select wire:model="label_color" class="form-select @error('label_color') is-invalid @enderror">
-                                    <option value="primary">Primary (Máº·c Ä‘á»‹nh)</option>
-                                    <option value="success">Success (HoÃ n thÃ nh)</option>
-                                    <option value="info">Info (Cuá»™c há»p)</option>
-                                    <option value="purple">Purple (Há»p cÃ´ng tÃ¡c)</option>
-                                    <option value="warning">Warning (CÃ¡ nhÃ¢n/NhÃ¡p)</option>
-                                    <option value="danger">Danger (Kháº©n cáº¥p)</option>
+                                    <option value="primary">Primary (Mặc định)</option>
+                                    <option value="success">Success (Hoàn thành)</option>
+                                    <option value="info">Info (Cuộc họp)</option>
+                                    <option value="purple">Purple (Họp công tác)</option>
+                                    <option value="warning">Warning (Cá nhân/Nháp)</option>
+                                    <option value="danger">Danger (Khẩn cấp)</option>
                                 </select>
                                 @error('label_color')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -122,7 +122,7 @@
                                         wire:model="is_private"
                                     />
                                     <label class="form-check-label fw-semibold" for="is_private">
-                                        Lá»‹ch riÃªng tÆ° (Chá»‰ báº¡n vÃ  quáº£n trá»‹ viÃªn nhÃ¬n tháº¥y chi tiáº¿t)
+                                        Lịch riêng tư (Chỉ bạn và quản trị viên nhìn thấy chi tiết)
                                     </label>
                                     @error('is_private')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -130,7 +130,7 @@
                                 </div>
                             </div>
                             <div class="col-6 mb-3">
-                                <label class="form-label fw-semibold">Thá»i gian báº¯t Ä‘áº§u <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold">Thời gian bắt đầu <span class="text-danger">*</span></label>
                                 <input
                                     type="datetime-local"
                                     wire:model="start_at"
@@ -141,7 +141,7 @@
                                 @enderror
                             </div>
                             <div class="col-6 mb-3">
-                                <label class="form-label fw-semibold">Thá»i gian káº¿t thÃºc</label>
+                                <label class="form-label fw-semibold">Thời gian kết thúc</label>
                                 <input
                                     type="datetime-local"
                                     wire:model="end_at"
@@ -152,31 +152,31 @@
                                 @enderror
                             </div>
                             <div class="col-12 mb-3">
-                                <label class="form-label fw-semibold">Äá»‹a Ä‘iá»ƒm</label>
+                                <label class="form-label fw-semibold">Địa điểm</label>
                                 <input
                                     type="text"
                                     wire:model="location"
                                     class="form-control @error('location') is-invalid @enderror"
-                                    placeholder="Nháº­p Ä‘á»‹a Ä‘iá»ƒm há»p, lÃ m viá»‡c..."
+                                    placeholder="Nhập địa điểm họp, làm việc..."
                                 />
                                 @error('location')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-12 mb-3">
-                                <label class="form-label fw-semibold">Ná»™i dung chi tiáº¿t</label>
+                                <label class="form-label fw-semibold">Nội dung chi tiết</label>
                                 <textarea
                                     wire:model="description"
                                     class="form-control @error('description') is-invalid @enderror"
                                     rows="3"
-                                    placeholder="MÃ´ táº£ ná»™i dung cÃ´ng viá»‡c chi tiáº¿t..."
+                                    placeholder="Mô tả nội dung công việc chi tiết..."
                                 ></textarea>
                                 @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-12 mb-3">
-                                <label class="form-label fw-semibold">ThÃ nh viÃªn tham gia</label>
+                                <label class="form-label fw-semibold">Thành viên tham gia</label>
                                 <div class="border rounded p-3 user-select-list @error('user_ids') is-invalid @enderror">
                                     @foreach ($users as $u)
                                         <div class="form-check mb-1">
@@ -204,13 +204,13 @@
                                     data-bs-dismiss="modal"
                                     wire:click="resetForm"
                                 >
-                                    Há»§y
+                                    Hủy
                                 </button>
                                 <button
                                     type="submit"
                                     class="btn btn-primary waves-effect waves-light"
                                 >
-                                    LÆ°u láº¡i
+                                    Lưu lại
                                 </button>
                             </div>
                         </div>
@@ -231,7 +231,7 @@
         <div class="modal-dialog modal-dialog-centered duty-schedule-detail-dialog">
             <div class="modal-content duty-schedule-detail-modal">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold text-dark" id="detailTitle">Chi tiáº¿t lá»‹ch cÃ´ng tÃ¡c</h5>
+                    <h5 class="modal-title fw-bold text-dark" id="detailTitle">Chi tiết lịch công tác</h5>
                     <button
                         type="button"
                         class="btn-close"
@@ -242,29 +242,29 @@
                 <div class="modal-body duty-schedule-detail-body">
                     <div class="schedule-detail-list">
                         <div class="schedule-detail-item">
-                            <strong class="schedule-detail-label"><i class="fi fi-rr-clock"></i>Báº¯t Ä‘áº§u:</strong>
+                            <strong class="schedule-detail-label"><i class="fi fi-rr-clock"></i>Bắt đầu:</strong>
                             <span id="detailStart" class="schedule-detail-value"></span>
                         </div>
                         <div class="schedule-detail-item">
-                            <strong class="schedule-detail-label"><i class="fi fi-rr-calendar"></i>Káº¿t thÃºc:</strong>
+                            <strong class="schedule-detail-label"><i class="fi fi-rr-calendar"></i>Kết thúc:</strong>
                             <span id="detailEnd" class="schedule-detail-value"></span>
                         </div>
                         <div class="schedule-detail-item">
-                            <strong class="schedule-detail-label"><i class="fi fi-rr-marker"></i>Äá»‹a Ä‘iá»ƒm:</strong>
+                            <strong class="schedule-detail-label"><i class="fi fi-rr-marker"></i>Địa điểm:</strong>
                             <span id="detailLocation" class="schedule-detail-value"></span>
                         </div>
                         <div class="schedule-detail-item">
-                            <strong class="schedule-detail-label"><i class="fi fi-rr-user"></i>NgÆ°á»i táº¡o:</strong>
+                            <strong class="schedule-detail-label"><i class="fi fi-rr-user"></i>Người tạo:</strong>
                             <div class="schedule-detail-value">
                                 <span id="detailCreator" class="schedule-detail-chip schedule-detail-chip-info"></span>
                             </div>
                         </div>
                         <div class="schedule-detail-item">
-                            <strong class="schedule-detail-label"><i class="fi fi-rr-users"></i>ThÃ nh viÃªn tham gia:</strong>
+                            <strong class="schedule-detail-label"><i class="fi fi-rr-users"></i>Thành viên tham gia:</strong>
                             <div id="detailParticipants" class="schedule-detail-value schedule-detail-chips"></div>
                         </div>
                         <div class="schedule-detail-item">
-                            <strong class="schedule-detail-label"><i class="fi fi-rr-document-signed"></i>Ná»™i dung:</strong>
+                            <strong class="schedule-detail-label"><i class="fi fi-rr-document-signed"></i>Nội dung:</strong>
                             <div id="detailDescription" class="schedule-detail-value schedule-detail-description" style="white-space: pre-wrap;"></div>
                         </div>
                     </div>
@@ -275,21 +275,21 @@
                         class="btn btn-light waves-effect"
                         data-bs-dismiss="modal"
                     >
-                        ÄÃ³ng
+                        Đóng
                     </button>
                     <button
                         type="button"
                         id="detailBtnEdit"
                         class="btn btn-warning waves-effect waves-light"
                     >
-                        <i class="fi fi-rr-edit me-1"></i> Chá»‰nh sá»­a
+                        <i class="fi fi-rr-edit me-1"></i> Chỉnh sửa
                     </button>
                     <button
                         type="button"
                         id="detailBtnDelete"
                         class="btn btn-danger waves-effect waves-light"
                     >
-                        <i class="fi fi-rr-trash me-1"></i> XÃ³a
+                        <i class="fi fi-rr-trash me-1"></i> Xóa
                     </button>
                 </div>
             </div>
@@ -309,7 +309,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title fw-bold text-dark" id="daySchedulesModalLabel">
-                        <i class="fi fi-rr-calendar text-primary me-2"></i> Lá»‹ch cÃ´ng tÃ¡c ngÃ y {{ $selectedDateStr }}
+                        <i class="fi fi-rr-calendar text-primary me-2"></i> Lịch công tác ngày {{ $selectedDateStr }}
                     </h5>
                     <button
                         type="button"
@@ -322,7 +322,7 @@
                     @if (empty($daySchedules))
                         <div class="text-center py-5">
                             <i class="fi fi-rr-calendar-slash scale-3x text-muted mb-3 d-block"></i>
-                            <p class="text-muted mb-0">KhÃ´ng cÃ³ lá»‹ch cÃ´ng tÃ¡c nÃ o trong ngÃ y nÃ y.</p>
+                            <p class="text-muted mb-0">Không có lịch công tác nào trong ngày này.</p>
                         </div>
                     @else
                         <div class="d-flex flex-column gap-3">
@@ -342,13 +342,13 @@
                                                     @endif
                                                     fw-semibold px-2 py-1"
                                                 >
-                                                    @if($schedule['label_color'] === 'success') HoÃ n thÃ nh
-                                                    @elseif($schedule['label_color'] === 'warning') CÃ¡ nhÃ¢n / NhÃ¡p
-                                                    @elseif($schedule['label_color'] === 'danger') Kháº©n cáº¥p
-                                                    @elseif($schedule['label_color'] === 'info') Cuá»™c há»p
-                                                    @elseif($schedule['label_color'] === 'purple') Há»p cÃ´ng tÃ¡c
-                                                    @elseif($schedule['label_color'] === 'private') Lá»‹ch riÃªng tÆ°
-                                                    @else Máº·c Ä‘á»‹nh
+                                                    @if($schedule['label_color'] === 'success') Hoàn thành
+                                                    @elseif($schedule['label_color'] === 'warning') Cá nhân / Nháp
+                                                    @elseif($schedule['label_color'] === 'danger') Khẩn cấp
+                                                    @elseif($schedule['label_color'] === 'info') Cuộc họp
+                                                    @elseif($schedule['label_color'] === 'purple') Họp công tác
+                                                    @elseif($schedule['label_color'] === 'private') Lịch riêng tư
+                                                    @else Mặc định
                                                     @endif
                                                 </span>
                                                 <span class="text-muted text-sm">
@@ -364,7 +364,7 @@
                                                     <button
                                                         type="button"
                                                         class="btn btn-sm btn-outline-warning p-1 lh-1"
-                                                        title="Chá»‰nh sá»­a"
+                                                        title="Chỉnh sửa"
                                                         wire:click="openEditFromList({{ $schedule['id'] }})"
                                                     >
                                                         <i class="fi fi-rr-edit"></i>
@@ -374,9 +374,9 @@
                                                     <button
                                                         type="button"
                                                         class="btn btn-sm btn-outline-danger p-1 lh-1"
-                                                        title="XÃ³a"
+                                                        title="Xóa"
                                                         wire:click="deleteFromList({{ $schedule['id'] }})"
-                                                        wire:confirm="Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n xÃ³a lá»‹ch cÃ´ng tÃ¡c nÃ y khÃ´ng?"
+                                                        wire:confirm="Bạn có chắc chắn muốn xóa lịch công tác này không?"
                                                     >
                                                         <i class="fi fi-rr-trash"></i>
                                                     </button>
@@ -386,17 +386,17 @@
                                         <h6 class="text-dark fw-bold mb-2">{{ $schedule['title'] }}</h6>
                                         <div class="row g-2 mb-2 text-sm text-muted">
                                             <div class="col-sm-6">
-                                                <strong><i class="fi fi-rr-marker me-1"></i> Äá»‹a Ä‘iá»ƒm:</strong> {{ $schedule['location'] ?: 'KhÃ´ng cÃ³' }}
+                                                <strong><i class="fi fi-rr-marker me-1"></i> Địa điểm:</strong> {{ $schedule['location'] ?: 'Không có' }}
                                             </div>
                                             <div class="col-sm-6">
-                                                <strong><i class="fi fi-rr-user me-1"></i> NgÆ°á»i táº¡o:</strong>
+                                                <strong><i class="fi fi-rr-user me-1"></i> Người tạo:</strong>
                                                 <span class="badge bg-info-subtle text-info border border-info text-xs">{{ $schedule['creator_name'] }}</span>
                                             </div>
                                         </div>
                                         <div class="mb-2 text-sm text-muted">
-                                            <strong><i class="fi fi-rr-users me-1"></i> ThÃ nh viÃªn:</strong>
+                                            <strong><i class="fi fi-rr-users me-1"></i> Thành viên:</strong>
                                             @if (empty($schedule['participants']))
-                                                <span class="text-muted">KhÃ´ng cÃ³</span>
+                                                <span class="text-muted">Không có</span>
                                             @else
                                                 <div class="d-inline-flex flex-wrap gap-1 align-items-center">
                                                     @foreach ($schedule['participants'] as $p)
@@ -423,7 +423,7 @@
                                     class="btn btn-primary btn-sm waves-effect waves-light"
                                     wire:click="openCreateFromList"
                                 >
-                                    <i class="fi fi-rr-plus me-1"></i> ThÃªm lá»‹ch ngÃ y nÃ y
+                                    <i class="fi fi-rr-plus me-1"></i> Thêm lịch ngày này
                                 </button>
                             @endif
                         @endcan
@@ -433,7 +433,7 @@
                         class="btn btn-light btn-sm waves-effect mb-0"
                         data-bs-dismiss="modal"
                     >
-                        ÄÃ³ng
+                        Đóng
                     </button>
                 </div>
             </div>
@@ -528,11 +528,11 @@
                 right: 'dayGridMonth'
             },
             buttonText: {
-                today: 'HÃ´m nay',
-                month: 'ThÃ¡ng'
+                today: 'Hôm nay',
+                month: 'Tháng'
             },
             buttonHints: {
-                prev: '$one trÆ°á»›c',
+                prev: '$one trước',
                 next: '$one sau'
             },
             editable: false,
@@ -540,7 +540,7 @@
             dayCellContent: function(arg) {
                 // Day number element
                 const numberEl = document.createElement('span');
-                const cleanNum = arg.dayNumberText.replace('thg', '').replace('thÃ¡ng', '').replace(/[a-zA-Z]/g, '').trim();
+                const cleanNum = arg.dayNumberText.replace('thg', '').replace('tháng', '').replace(/[a-zA-Z]/g, '').trim();
                 
                 if (arg.isToday) {
                     numberEl.className = 'day-cell-today-number';
@@ -589,12 +589,12 @@
                 // 1. Get event time string
                 let timeStr = '';
                 if (event.allDay) {
-                    timeStr = 'Cáº£ ngÃ y';
+                    timeStr = 'Cả ngày';
                 } else if (event.start) {
                     // Check if start time is 00:00:00 and end is null or 23:59:59 (all day)
                     const isAllDayLike = event.start.getHours() === 0 && event.start.getMinutes() === 0;
                     if (isAllDayLike && (!event.end || (event.end.getHours() === 0 && event.end.getMinutes() === 0))) {
-                        timeStr = 'Cáº£ ngÃ y';
+                        timeStr = 'Cả ngày';
                     } else {
                         const startHours = String(event.start.getHours()).padStart(2, '0');
                         const startMinutes = String(event.start.getMinutes()).padStart(2, '0');
@@ -636,13 +636,13 @@
                 titleEl.innerText = props.raw_title || event.title;
                 card.appendChild(titleEl);
                 
-                // Meta subtitle (time â€¢ names)
+                // Meta subtitle (time • names)
                 const metaEl = document.createElement('span');
                 metaEl.className = 'app-event-meta';
                 
                 let metaText = '';
                 if (timeStr && namesStr) {
-                    metaText = `${timeStr} â€¢ ${namesStr}`;
+                    metaText = `${timeStr} • ${namesStr}`;
                 } else {
                     metaText = timeStr || namesStr || '';
                 }
@@ -697,9 +697,9 @@
 
                 document.getElementById('detailTitle').innerText = props.raw_title || event.title;
                 document.getElementById('detailStart').innerText = event.start ? formatDateTime(event.start) : '';
-                document.getElementById('detailEnd').innerText = event.end ? formatDateTime(event.end) : 'KhÃ´ng cÃ³';
-                document.getElementById('detailLocation').innerText = props.location || 'KhÃ´ng cÃ³';
-                document.getElementById('detailDescription').innerText = props.description || 'KhÃ´ng cÃ³';
+                document.getElementById('detailEnd').innerText = event.end ? formatDateTime(event.end) : 'Không có';
+                document.getElementById('detailLocation').innerText = props.location || 'Không có';
+                document.getElementById('detailDescription').innerText = props.description || 'Không có';
                 document.getElementById('detailCreator').innerText = props.creator_name || 'N/A';
 
                 const participantsContainer = document.getElementById('detailParticipants');
@@ -712,35 +712,8 @@
                         participantsContainer.appendChild(span);
                     });
                 } else {
-                    participantsContainer.innerHTML = '<span class="schedule-detail-empty">KhÃ´ng cÃ³</span>';
+                    participantsContainer.innerHTML = '<span class="schedule-detail-empty">Không có</span>';
                 }
-
-                const btnEdit = document.getElementById('detailBtnEdit');
-                const btnDelete = document.getElementById('detailBtnDelete');
-
-                if (props.can_edit) {
-                    btnEdit.style.display = 'inline-block';
-                    btnEdit.onclick = function() {
-                        hideBootstrapModal('eventDetailsModal');
-                        wire.edit(event.id);
-                    };
-                } else {
-                    btnEdit.style.display = 'none';
-                }
-
-                if (props.can_delete) {
-                    btnDelete.style.display = 'inline-block';
-                    btnDelete.onclick = function() {
-                        if (confirm('Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n xÃ³a lá»‹ch cÃ´ng tÃ¡c nÃ y khÃ´ng?')) {
-                            hideBootstrapModal('eventDetailsModal');
-                            wire.delete(event.id);
-                        }
-                    };
-                } else {
-                    btnDelete.style.display = 'none';
-                }
-
-                showBootstrapModal('eventDetailsModal');
             }
         });
 
